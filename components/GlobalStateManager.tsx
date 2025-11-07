@@ -469,17 +469,16 @@ export const GlobalStateManager: React.FC = () => {
     const unsubLotterySets = onSnapshot(query(collection(db, 'lotterySets'), where('status', '!=', 'ARCHIVED')), (snapshot) => {
         const sets: LotterySet[] = [];
         snapshot.forEach(doc => {
-            const data = doc.data() as LotterySet;
+            // FIX: The original unsafe cast to `LotterySet` caused a type error because Firestore data may not perfectly match the interface.
+            // By using the raw `DocumentData` from `doc.data()`, property access is allowed, and the line below can safely provide a default for `allowSelfPickup`.
+            const data = doc.data();
             const remaining = data.prizes.filter(p => p.type === 'NORMAL').reduce((sum, p) => p.total, 0) - data.drawnTicketIndices.length;
             const status = remaining <= 0 ? 'SOLD_OUT' : data.status;
             const prizesWithRemaining = data.prizes.map(p => {
                 const drawnCount = data.drawnTicketIndices.filter(idx => data.prizeOrder && data.prizeOrder[idx] === p.id).length;
                 return {...p, remaining: p.total - drawnCount};
             });
-// FIX: The error "Property 'allowSelfPickup' does not exist on type 'unknown'" likely stems from an unsafe cast
-// from Firestore's `doc.data()`. If `allowSelfPickup` is missing from a document, it becomes `undefined`,
-// violating the `LotterySet` type. We provide a default value of `false` to ensure type safety.
-            sets.push({ ...data, id: doc.id, status, prizes: prizesWithRemaining, allowSelfPickup: data.allowSelfPickup ?? false });
+            sets.push({ ...(data as LotterySet), id: doc.id, status, prizes: prizesWithRemaining, allowSelfPickup: data.allowSelfPickup ?? false });
         });
         dispatch({ type: 'SET_LOTTERY_SETS', payload: sets });
     });

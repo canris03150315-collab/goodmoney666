@@ -22,13 +22,12 @@ import {
 
 // 您的 Firebase 專案配置
 const firebaseConfig = {
-  apiKey: "AIzaSyDdeqREYajghXTS_g3cOAz5W81OV_yLgiU",
-  authDomain: "goodmoney-a7579.firebaseapp.com",
-  projectId: "goodmoney-a7579",
-  storageBucket: "goodmoney-a7579.firebasestorage.app",
-  messagingSenderId: "702668336145",
-  appId: "1:702668336145:web:46ea1429a7423880c055b0",
-  measurementId: "G-JLHSNPGWL3"
+  apiKey: "AIzaSyDeG5s2FKT5ZvowIw8tQmqvTHI3aeK2k_s",
+  authDomain: "goodmoney666-jackpot.firebaseapp.com",
+  projectId: "goodmoney666-jackpot",
+  storageBucket: "goodmoney666-jackpot.appspot.com",
+  messagingSenderId: "248630813908",
+  appId: "1:248630813908:web:1e7cc138588b8dde3c8741"
 };
 
 // 初始化 Firebase 應用程式
