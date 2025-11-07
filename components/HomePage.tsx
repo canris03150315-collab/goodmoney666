@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import type { AppState, LotterySet, Banner, Category } from '../types';
+import type { AppState, LotterySet, Banner, Category, Order, User } from '../types';
 import { ProductCard } from './ProductCard';
 import { SearchIcon, XCircleIcon, ChevronLeftIcon, ChevronRightIcon, ArrowUpRightIcon } from './icons';
+import { WinnersList } from './WinnersList';
 
 // A simple banner component
 const BannerCarousel: React.FC<{ banners: Banner[], interval: number, onSelectLotteryById: (id: string) => void }> = ({ banners, interval, onSelectLotteryById }) => {
@@ -188,7 +189,7 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onSelectLottery, onSelectLotteryById, state }) => {
-    const { lotterySets, siteConfig, categories } = state;
+    const { lotterySets, siteConfig, categories, orders, users, inventory } = state;
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
     const [categorySearchTerm, setCategorySearchTerm] = useState('');
     const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'remaining-asc'>('default');
@@ -275,6 +276,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectLottery, onSelectLot
         if (!globalSearchTerm) return [];
         return lotterySets.filter(lottery => lottery.title.toLowerCase().includes(globalSearchTerm.toLowerCase()));
     }, [lotterySets, globalSearchTerm]);
+
+    const recentOrders = useMemo(() => {
+        return [...orders]
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 15);
+    }, [orders]);
 
     const handleSelectCategory = (categoryId: string | null) => {
         setSelectedCategoryId(categoryId);
@@ -392,6 +399,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectLottery, onSelectLot
                             </div>
                         )}
                     </main>
+                </div>
+                
+                <div className="mt-16">
+                    <WinnersList orders={recentOrders} users={users} inventory={inventory} />
                 </div>
             </div>
         </div>
