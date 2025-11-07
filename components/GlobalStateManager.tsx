@@ -471,7 +471,8 @@ export const GlobalStateManager: React.FC = () => {
         snapshot.forEach(doc => {
             // FIX: The original unsafe cast to `LotterySet` caused a type error because Firestore data may not perfectly match the interface.
             // By using the raw `DocumentData` from `doc.data()`, property access is allowed, and the line below can safely provide a default for `allowSelfPickup`.
-            const data = doc.data();
+            // FIX: Explicitly type `data` as `any` to resolve property access error on `allowSelfPickup`.
+            const data: any = doc.data();
             const remaining = data.prizes.filter(p => p.type === 'NORMAL').reduce((sum, p) => p.total, 0) - data.drawnTicketIndices.length;
             const status = remaining <= 0 ? 'SOLD_OUT' : data.status;
             const prizesWithRemaining = data.prizes.map(p => {

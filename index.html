@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ichiban Kuji Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Babel to transpile JSX/TSX in the browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="importmap">
 {
   "imports": {
@@ -58,6 +60,7 @@
 </head>
   <body class="bg-white">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <!-- Change script type to text/babel and add presets for React and TypeScript -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module" src="/index.tsx"></script>
   </body>
 </html>
